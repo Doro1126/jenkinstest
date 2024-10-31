@@ -21,5 +21,13 @@ pipeline {
         '''
       }
     }
+    stage('ansible command') {
+      steps {
+        sh '''
+        ansible master -m shell -a 'sudo kubectl create deploy web-red --replicas=3 port=80 --image=doro0704/keduitlab:red'
+        ansible master -m shell -a 'sudo kubectl expose deploy web-red --type=LoadBalancer --port=80 target-port=80 --name=web-red-svc'
+        '''
+      }
+    }
   }
 }
